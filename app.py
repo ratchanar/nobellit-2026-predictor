@@ -5,7 +5,7 @@ import requests
 from pathlib import Path
 from datetime import date
 
-st.set_page_config(page_title="NobelLit 2026 Predictor v2", page_icon="🏆", layout="wide")
+st.set_page_config(page_title="NobelLit 2026 Predictor v2", layout="wide")
 
 BASE = Path(__file__).parent
 CANDIDATE_FILE = BASE / "candidates_2026.csv"
@@ -95,7 +95,7 @@ cand["Literary_Profile"]=cand[profile_cols].mean(axis=1)*10
 cand["Recent_Attention_Score"]=cand["Recent_Attention"]*10
 
 st.markdown("""
-# 🏆 NobelLit 2026 Predictor — Version 2
+# Nobel Prize Literature 2026 Predictor
 ### Historical patterns + public market signals + explainable scoring
 """)
 
@@ -106,7 +106,7 @@ st.warning(
 )
 
 # Sidebar
-st.sidebar.header("⚙️ Model controls")
+st.sidebar.header("Model controls")
 market_w=st.sidebar.slider("Public market signal",0,100,45)
 history_w=st.sidebar.slider("Historical similarity",0,100,35)
 profile_w=st.sidebar.slider("Literary profile",0,100,20)
@@ -117,7 +117,7 @@ if total==0:
 mw,hw,pw=[x/total for x in (market_w,history_w,profile_w)]
 st.sidebar.caption(f"Normalised: Market {mw:.0%} | Historical {hw:.0%} | Profile {pw:.0%}")
 
-tabs=st.tabs(["🏆 Prediction","📚 Historical Nobel","🔎 Author Similarity","📊 Odds Lab","🧪 Model Sandbox","ℹ️ Methodology"])
+tabs=st.tabs(["Prediction","Historical Nobel","Author Similarity","Odds Lab","Model Sandbox","Methodology"])
 
 with tabs[0]:
     # Historical score: transparent heuristic based on a few dimensions.
@@ -160,7 +160,7 @@ with tabs[0]:
     st.caption("The model share is a score-derived distribution, not an official Nobel probability.")
 
 with tabs[1]:
-    st.subheader("📚 What can the official Nobel data tell us?")
+    st.subheader("What can the official Nobel data tell us?")
     if hist_error:
         st.error(f"Could not reach NobelPrize.org right now: {hist_error}")
         st.info("Try again later. The app is designed to retrieve the official data automatically.")
@@ -225,7 +225,7 @@ with tabs[2]:
             st.info("Laureate detail endpoint unavailable; age similarity is not shown.")
 
 with tabs[3]:
-    st.subheader("📊 Odds Lab")
+    st.subheader("Odds Lab")
     author=st.selectbox("Select author",cand["Author"].tolist(),key="odds_author")
     r=cand[cand["Author"]==author].iloc[0]
     fractional=float(r["Fractional_Odds_Denominator"])
@@ -252,7 +252,7 @@ with tabs[3]:
     }),use_container_width=True,hide_index=True)
 
 with tabs[4]:
-    st.subheader("🧪 Classroom model sandbox")
+    st.subheader("Classroom model sandbox")
     st.write("This page lets students see how changing one feature changes the transparent score.")
     author=st.selectbox("Author",cand["Author"].tolist(),key="sandbox_author")
     r=cand[cand["Author"]==author].iloc[0]
@@ -281,7 +281,7 @@ with tabs[4]:
 """)
 
 with tabs[5]:
-    st.subheader("ℹ️ Methodology and limitations")
+    st.subheader("Methodology and limitations")
     st.markdown("""
 ### Data
 
@@ -312,7 +312,7 @@ Public odds are speculative and may differ substantially between markets.
 """)
 
     st.download_button(
-        "⬇️ Download candidate/model data",
+        "Download candidate/model data",
         rank.to_csv(index=False).encode("utf-8"),
         "nobellit_2026_v2_results.csv",
         "text/csv"
